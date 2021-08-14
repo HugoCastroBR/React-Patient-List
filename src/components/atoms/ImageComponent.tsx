@@ -20,11 +20,11 @@ const ImageComponent = (
     >
       <img
         src={src}
-        style={{borderRadius, width, height}}
+        style={{borderRadius, width, height,cursor: `${onClick ? 'pointer' : 'auto'}`}}
       />
     </a>
   );
-  
+
 }
 
 export default ImageComponent;
