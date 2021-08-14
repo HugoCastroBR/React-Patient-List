@@ -1,13 +1,13 @@
-import WelcomePage from 'pages/Welcome';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import DashBoard from 'pages/DashBoard';
 
 
 const Routes = () => {
   return(
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={WelcomePage} />
+        <Route path="/" component={DashBoard} />
       </Switch>
     </BrowserRouter>
   )
