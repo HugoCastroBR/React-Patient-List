@@ -1,52 +1,61 @@
 import * as React from 'react';
-import { useTheme } from 'styled-components';
-import useStore from 'hooks/useStore';
+import { Table } from 'antd';
+import Actions from 'components/molecules/Actions';
+import { TableData } from 'types';
 
 
-interface TableData {
-  name: string;
-  gender: string;
-  birth: string;
-}
 
 
-const Table = ({ data }: { data: TableData[] }) => {
-
-
-  const { states } = useStore();
-
-
-  return (
-    <div className="d-flex justify-content-center">
-      <table className="table table-hover">
-        <thead className={`table-${states.Page.theme}`}>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Gender</th>
-            <th scope="col">Birth</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+const TableComponent = ({data,isLoading=false}: { data: TableData[],isLoading?:boolean }) => {
+  return(
+    <Table
+      pagination={false}
+      rowKey="name" 
+      loading={isLoading}
+      columns = {
+        [
           {
-            data.map(person => {
-              return (
-                <React.Fragment key={person.name}>
-                  <tr >
-                    <td>{person.name}</td>
-                    <td>{person.gender}</td>
-                    <td>{person.birth}</td>
-                    <td>options</td>
-                  </tr>
-                </React.Fragment>
-              )
-            })
+            title: 'Id',
+            dataIndex: 'id',
+            key: 'id',
+            sorter: (a, b) => a.id - b.id,
+            width: '6%',
+          },
+          {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name)
+          },
+          {
+            title: 'Gender',
+            dataIndex: 'gender',
+            key: 'gender',
+            sorter: (a, b) => a.gender.localeCompare(b.gender)
+          },
+          {
+            title: 'Birth Date',
+            dataIndex: 'birth',
+            key: 'birth',
+            sorter: (a, b) => Number(new Date(a.birth)) - Number(new Date(b.birth))
+          },
+          {
+            title: 'Actions',
+            key: 'actions',
+            dataIndex: 'actions',
+            width: '10%',
           }
-        </tbody>
-      </table>
-    </div>
-  );
-
+        ]
+      }
+      dataSource={data.map((e,id) => {
+        return {
+          ...e,
+          gender: `${e.gender.toLowerCase() === "male" ? "Male" : "Female"}`,
+          actions: <Actions id={Number(id)} key={`${id}-${e.gender}`}/>,
+        }
+      })}
+    />
+  )
 }
 
-export default Table;
+export default TableComponent;

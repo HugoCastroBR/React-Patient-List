@@ -2,10 +2,27 @@ import React from 'react';
 import 'assets/css/App.css';
 import ImageComponent from 'components/atoms/ImageComponent';
 import Page from 'components/templates/Page';
-import Table from 'components/organisms/Table';
-import TextBlock from './../components/atoms/TextBlock';
+import TextBlock from 'components/atoms/TextBlock';
+import TableComponent from 'components/organisms/Table';
+import { useEffect } from 'react';
+import useStore from 'hooks/useStore';
+import { getPatients,getMorePatients } from './../store/fetchActions/patients';
+import { SetPatients } from 'store/actions';
+import { Modal } from 'antd';
+
 
 const DashBoard = () => {
+
+  const {states, dispatch} = useStore()
+
+  useEffect(() => {
+      console.log('DashBoard');
+      dispatch(getPatients())
+  },[])
+
+  useEffect(() => {
+      console.log(states);
+  },[states.Patients.patients])
 
   const data = [
     {
@@ -23,7 +40,7 @@ const DashBoard = () => {
   return (
     <Page >
       <div className="d-flex align-items-center flex-column" >
-        <div style={{ width: "76vw" }}>
+        <div style={{ width: "76vw" }} className="d-flex flex-column">
           <div
             style={{ marginTop: "36px" }}
           >
@@ -32,12 +49,34 @@ const DashBoard = () => {
             />
           </div>
           <div style={{ marginTop: "36px" }}>
-            <Table
-              data={data}
+            <TableComponent
+              isLoading={states.Page.isLoading}
+              data={states.Patients.patients.map((patient:any) => {
+                return {
+                  ...patient,
+                  name: patient.name.first + ' ' + patient.name.last
+                }
+              })}
             />
           </div>
+          <button 
+            className="btn btn-primary align-self-center m-4"
+            onClick={() => {
+              dispatch(getMorePatients())
+            }}
+          >
+            Load More
+          </button>
+            
         </div>
       </div>
+      <Modal
+      closable
+      visible={states.Page.modal}>
+        <h1>
+          teste
+        </h1>
+      </Modal>
     </Page>
   )
 };

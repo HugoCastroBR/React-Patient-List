@@ -23,7 +23,9 @@ const Page = (
     <ThemeProvider theme={states.Page.theme === "light" ? lightTheme : darkTheme}>
       {header && <Header/>}
       {children}
+
     </ThemeProvider>
+    
   );
 
 }

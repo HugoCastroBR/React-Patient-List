@@ -6,6 +6,7 @@ export const PageSlice = createSlice({
 	initialState: {
 		isLoading: false,
 		theme: "light",
+		modal: true
 	},
 	reducers: {
     SET_LOADING(state,{payload}:{payload:boolean}){
